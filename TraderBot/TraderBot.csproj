@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LiveData.cs" />
     <Compile Include="Payload.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,13 +8,13 @@ using WebSocket4Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace TraderBot
+namespace TraderBot //netflify.com
 {
     class Program
     {
         #region Fields
         static WebSocket mSocketClient = null;
-        static string subjson = @"
+        static readonly string subjson = @"
                 {
                   ""type"": ""subscribe"",
                   ""channels"": [
@@ -27,7 +27,7 @@ namespace TraderBot
                   ]
                 }";
 
-        #endregion
+        #endregion Fields
 
         #region Methods
         private static void InitNetWork()
@@ -45,7 +45,7 @@ namespace TraderBot
             mSocketClient.Open();
         }
 
-        #endregion
+        #endregion Methods
 
 
         static void Main(string[] args)
@@ -75,11 +75,28 @@ namespace TraderBot
         private static void MSocketClient_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             Console.WriteLine("Message Recieved" + e.Message);
+            
+            try
+            {
+                LiveData rawCandles = JsonConvert.DeserializeObject<LiveData>(e.Message);
+                Console.WriteLine(rawCandles.Price);
+                Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.Message);
+                Console.WriteLine(values.Count);
+                //dict works but needs adding to a list now?
+                //List<Product> products = JsonConvert.DeserializeObject<List<Product>>(json);
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private static void MSocketClient_DataReceived(object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine("DataRecieved" + e.Data);
+            
         }
 
 
