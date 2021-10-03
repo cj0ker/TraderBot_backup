@@ -1,75 +1,89 @@
-﻿using Newtonsoft.Json;
-using System;
-using WebSocketSharp;
+﻿using System;
+using System.Security.Authentication;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WebSocket4Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TraderBot
 {
-    // JSON Creation Class - start
-    public class Channels
+    class Program
     {
-        public string name;
-        public string[] product_ids;
-    };
-
-    public class Payload
-    {
-        public string type;
-        public string testcase;
-        public Channels channels;
-    };
-
-    // JSON Creation Class - end
-
-    internal class Program
-    {
-        private static void Main(string[] args)
-        {
-            //creating the basic subscibe JSON payload
-            var subscribePayload = new Payload()
-            {
-                type = "subscribe",
-                channels = new Channels
+        #region Fields
+        static WebSocket mSocketClient = null;
+        static string subjson = @"
                 {
-                    name = "ticker",
-                    product_ids = new string[] { "BTC-USD" }
-                }
-            };
+                  ""type"": ""subscribe"",
+                  ""channels"": [
+                    {
+                                ""name"": ""ticker"",
+                      ""product_ids"": [
+                        ""BTC-USD""
+                      ]
+                    }
+                  ]
+                }";
 
-            // serializing the json object
-            //string subscribe_message = JsonConvert.SerializeObject(subscribePayload,
-            //    Formatting.Indented,
-            //    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+        #endregion
 
-            string subscribe_message = JsonConvert.SerializeObject(subscribePayload,
-                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+        #region Methods
+        private static void InitNetWork()
+        {
+            mSocketClient = new WebSocket("wss://ws-feed-public.sandbox.pro.coinbase.com", sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
+            mSocketClient.Opened += new EventHandler(websocket_Opened);
+            mSocketClient.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(websocket_Error);
+            mSocketClient.Closed += new EventHandler(websocket_Closed);
+            //mSocketClient.MessageReceived += new EventHandler<WebSocket4Net.MessageReceivedEventArgs>(websocket_MessageReceived);
+            //mSocketClient.DataReceived += new EventHandler<DataReceivedEventArgs>(websocket_DataReceived);
+            
+            mSocketClient.MessageReceived += MSocketClient_MessageReceived;
+            mSocketClient.DataReceived += MSocketClient_DataReceived;
+            //ws.OnMessage += Ws_OnMessage;
+            mSocketClient.Open();
+        }
 
-            //Console.WriteLine(subscribe_message);
-            //Console.ReadLine();
-            string CoinbaseWSS = "wss://ws-feed-public.sandbox.pro.coinbase.com";
-            //Create an instance of a websocket client
-            using (var ws = new WebSocket(CoinbaseWSS))
-            {
-
-                ws.Connect();
-
-
-
-
-
+        #endregion
 
 
-
-            }
+        static void Main(string[] args)
+        {
+            InitNetWork();
 
             Console.ReadKey();
         }
 
 
-
-
-        private static void Ws_OnMessage(object sender, MessageEventArgs e)
+        private static void websocket_Opened(object sender, EventArgs e)
         {
-            Console.WriteLine("Recieved from the serrver: " + e.Data);
+            
+            mSocketClient.Send(subjson);
         }
+
+        private static void websocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            Console.WriteLine("websocket_Error:" + e.Exception.ToString());
+        }
+
+        private static void websocket_Closed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Connection closed");
+        }
+
+        private static void MSocketClient_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            Console.WriteLine("Message Recieved" + e.Message);
+        }
+
+        private static void MSocketClient_DataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine("DataRecieved" + e.Data);
+        }
+
+
+
+
     }
 }
