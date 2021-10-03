@@ -33,9 +33,9 @@ namespace TraderBot
         private static void InitNetWork()
         {
             mSocketClient = new WebSocket("wss://ws-feed-public.sandbox.pro.coinbase.com", sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
-            mSocketClient.Opened += new EventHandler(websocket_Opened);
-            mSocketClient.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(websocket_Error);
-            mSocketClient.Closed += new EventHandler(websocket_Closed);
+            mSocketClient.Opened += new EventHandler(MSocketClient_Opened);
+            mSocketClient.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(MSocketClient_Error);
+            mSocketClient.Closed += new EventHandler(MSocketClient_Closed);
             //mSocketClient.MessageReceived += new EventHandler<WebSocket4Net.MessageReceivedEventArgs>(websocket_MessageReceived);
             //mSocketClient.DataReceived += new EventHandler<DataReceivedEventArgs>(websocket_DataReceived);
             
@@ -56,18 +56,18 @@ namespace TraderBot
         }
 
 
-        private static void websocket_Opened(object sender, EventArgs e)
+        private static void MSocketClient_Opened(object sender, EventArgs e)
         {
             
             mSocketClient.Send(subjson);
         }
 
-        private static void websocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        private static void MSocketClient_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
             Console.WriteLine("websocket_Error:" + e.Exception.ToString());
         }
 
-        private static void websocket_Closed(object sender, EventArgs e)
+        private static void MSocketClient_Closed(object sender, EventArgs e)
         {
             Console.WriteLine("Connection closed");
         }
