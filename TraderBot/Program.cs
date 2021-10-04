@@ -14,6 +14,8 @@ namespace TraderBot //netflify.com
     {
         #region Fields
         static WebSocket mSocketClient = null;
+        
+        static int counter = 0;
         static readonly string subjson = @"
                 {
                   ""type"": ""subscribe"",
@@ -32,6 +34,7 @@ namespace TraderBot //netflify.com
         #region Methods
         private static void InitNetWork()
         {
+            
             mSocketClient = new WebSocket("wss://ws-feed-public.sandbox.pro.coinbase.com", sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
             mSocketClient.Opened += new EventHandler(MSocketClient_Opened);
             mSocketClient.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(MSocketClient_Error);
@@ -50,11 +53,13 @@ namespace TraderBot //netflify.com
 
         static void Main(string[] args)
         {
+            
             InitNetWork();
 
             Console.ReadKey();
         }
 
+        static List<LiveData> candles = new List<LiveData>();
 
         private static void MSocketClient_Opened(object sender, EventArgs e)
         {
@@ -74,23 +79,43 @@ namespace TraderBot //netflify.com
 
         private static void MSocketClient_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            Console.WriteLine("Message Recieved" + e.Message);
-            
-            try
-            {
-                LiveData rawCandles = JsonConvert.DeserializeObject<LiveData>(e.Message);
-                Console.WriteLine(rawCandles.Price);
-                Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.Message);
-                Console.WriteLine(values.Count);
-                //dict works but needs adding to a list now?
-                //List<Product> products = JsonConvert.DeserializeObject<List<Product>>(json);
+            //Console.WriteLine("Message Recieved" + e.Message);
+            if (counter != 0)
+                try
+                {
+                    LiveData rawCandles = JsonConvert.DeserializeObject<LiveData>(e.Message);
+                    Console.WriteLine(rawCandles.Price);
+                    candles.Add(rawCandles);
+                    //Console.WriteLine("Current count is: " + counter);
+                    //Console.WriteLine(candles);
+                    //foreach (LiveData aCandle in candles)
+                    //{
+                    //    Console.WriteLine(aCandle);
+                    //}
 
-            }
 
-            catch (Exception ex)
+                    //Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.Message);
+                    //Console.WriteLine(values.Count);
+                    //dict works but needs adding to a list now?
+                    //List<Product> products = JsonConvert.DeserializeObject<List<Product>>(json);
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+                catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+            counter = counter + 1;
         }
 
         private static void MSocketClient_DataReceived(object sender, DataReceivedEventArgs e)

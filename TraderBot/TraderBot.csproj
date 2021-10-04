@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="LiveData.cs" />
     <Compile Include="Payload.cs" />
     <Compile Include="Program.cs" />
