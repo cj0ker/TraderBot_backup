@@ -14,7 +14,8 @@ namespace TraderBot //netflify.com
     {
         #region Fields
         static WebSocket mSocketClient = null;
-        
+        private readonly string[] defaultmarkets = { "BTC-USD" };
+
         static int counter = 0;
         static readonly string subjson = @"
                 {
@@ -54,8 +55,12 @@ namespace TraderBot //netflify.com
         static void Main(string[] args)
         {
             
-            InitNetWork();
+            //InitNetWork();
+            
+            var mJson = new mJson("subscribe", "BTC-USD");
+            Console.WriteLine(mJson.payload());
 
+            
             Console.ReadKey();
         }
 
@@ -115,7 +120,7 @@ namespace TraderBot //netflify.com
             {
                 Console.WriteLine(ex);
             }
-            counter = counter + 1;
+            counter++;
         }
 
         private static void MSocketClient_DataReceived(object sender, DataReceivedEventArgs e)
