@@ -24,10 +24,10 @@ namespace TraderBot
         public float Volume24h;
 
         [JsonProperty("low_24h")]
-        public int Low24h;
+        public float Low24h;
 
         [JsonProperty("high_24h")]
-        public int High24h;
+        public float High24h;
 
         [JsonProperty("volume_30d")]
         public float Volume30d;
