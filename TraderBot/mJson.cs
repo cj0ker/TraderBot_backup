@@ -32,18 +32,19 @@ namespace TraderBot
                     new JProperty("type", sentType),
                     new JProperty("channels",
                     new JArray(
-                        new JObject("name", "ticker"),
-                        new JProperty("product_ids",
-                        new JArray(
-                            from s in sentMarkets
-                            select new JValue(s))))));
+                        new JObject(
+                            new JProperty("name", "ticker"),
+                            new JProperty("product_ids",
+                            new JArray(
+                                from s in sentMarkets
+                                select new JValue(s)))))));
 
             //new JProperty("Product_ids", sentMarkets))));
 
             //from c in sentMarkets
             //select new JValue(c)))))))));
 
-            Console.WriteLine(json.ToString());
+            //Console.WriteLine(json.ToString());
             return json.ToString();
         }
         
