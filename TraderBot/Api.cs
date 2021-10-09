@@ -9,11 +9,7 @@ namespace TraderBot
 {
     public class Api
     {
-        bool test = true;
 
-
-        private static readonly string baseURL = APIKeys.APISandbox;
-        //private static readonly string baseURL = "https://api.exchange.coinbase.com/";
         
         private static readonly string apiKey = APIKeys.APIKey;
         private static readonly string apiSecret = APIKeys.APISecret;
@@ -28,10 +24,7 @@ namespace TraderBot
                 //callto generator method?
             }
 
-            private string Generator(string querystring)
-            {
-                return string.Empty;
-            }
+
 
             private string ApiCall(string URL)
             {

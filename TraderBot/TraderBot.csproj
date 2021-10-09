@@ -132,6 +132,7 @@
   <ItemGroup>
     <Compile Include="APIKeys.cs" />
     <Compile Include="Api.cs" />
+    <Compile Include="QueryBuilder.cs" />
     <Compile Include="mJson.cs" />
     <Compile Include="mWebsocket.cs" />
     <Compile Include="LiveData.cs" />
