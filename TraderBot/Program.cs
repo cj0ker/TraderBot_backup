@@ -17,18 +17,23 @@ namespace TraderBot //netflify.com
 
 
 
-            var mJson = new mJson("subscribe", "BTC-USD").payload();
-            Console.WriteLine(mJson);
+            //var mJson = new mJson("subscribe", "BTC-USD").payload();
+            //Console.WriteLine(mJson);
 
-            var mWebsocket = new mWebsocket(mJson);
-            mWebsocket.InitNetWork();
+            //var mWebsocket = new mWebsocket(mJson);
+            //mWebsocket.InitNetWork();
             //Console.WriteLine(candles);
 
 
             //InitNetWork(mJsonString);
-            
 
-            Console.ReadKey();
+            //var testing = new Api.Fetch(1);
+            var testing = new Api();
+            string history = testing.History("BTC-USD");
+            Console.WriteLine(history);
+
+
+           Console.ReadKey();
         }
 
         

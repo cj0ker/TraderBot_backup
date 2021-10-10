@@ -14,12 +14,26 @@ namespace TraderBot
 
         private static readonly string baseURL = APIKeys.APISandbox;
         //private static readonly string baseURL = "https://api.exchange.coinbase.com/";
+        string query = "";
 
-        public QueryBuilder (string querystring)
+        public QueryBuilder(string endpoint)
         {
-            
-            Generator(querystring);
+            Generator(endpoint);
         }
+
+        public QueryBuilder(string endpoint, string market)
+        {
+
+            string _query = baseURL;
+            _query += endpoint;
+            _query += "/";
+            _query += market;
+            _query += "candles";
+
+        }
+
+
+
 
         private string Generator(string querystring)
         {
