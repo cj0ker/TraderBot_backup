@@ -22,6 +22,7 @@ namespace TraderBot
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
+        //added to check sometime with git push
 
         public string Product()
         {
