@@ -1,63 +1,130 @@
-﻿using RestSharp;
+﻿using Coinbase.Pro;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TraderBot
 {
     public class Api
+        // this willl be re written in future to not depend on Coinbase.pro lib
+        // all data exiting must be raw(ish)
     {
-        private static readonly string apiKey = APIKeys.APIKey;
-        private static readonly string apiSecret = APIKeys.APISecret;
-        private static readonly string apiPass = APIKeys.APIPassphrase;
+        const string BaseUrl = "https://api-public.sandbox.exchange.coinbase.com"; //Sandbox URL
+        //const string BaseUrl = "https://api.exchange.coinbase.com"; //Live URL
 
-        public string AccountInfo()
-        {
-            String timestamp = DateTime.Now.ToString();
-            var client = new RestClient("https://api.exchange.coinbase.com/accounts");
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Accept", "application/json");
-            request.AddHeader("cb-access-key", apiKey);
-            request.AddHeader("cb-access-passphrase", apiPass);
-            request.AddHeader("cb-access-sign", apiPass);
-            request.AddHeader("cb-access-timestamp", timestamp);
-            IRestResponse response = client.Execute(request);
-            return response.Content;
-        }
-        //added to check sometime with git push
+        readonly CoinbaseProClient _client;
 
-        public string Product()
+        string _apikey = APIKeys.APIKey;
+        string _secret = APIKeys.APISecret;
+        string _passphrase = APIKeys.APISecret;
+
+
+        public Api()
         {
-            string baseQuery = "https://api.exchange.coinbase.com/products/";
-            var client = new RestClient(baseQuery);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Accept", "application/json");
-            IRestResponse response = client.Execute(request);
-            return response.Content;
+            _client = new CoinbaseProClient(new Config
+            {
+                ApiKey = _apikey,
+                Secret = _secret,
+                Passphrase = _passphrase,
+                ApiUrl = "https://api-public.sandbox.pro.coinbase.com"
+            });
+
         }
 
-        public string History(string Market)
+        private async Task<List<Coinbase.Pro.Models.Candle>> History_fetch(string market, DateTime start, DateTime end, int granularity)
         {
-            string baseQuery = $"https://api.exchange.coinbase.com/products/{Market}/candles";
-            var client = new RestClient(baseQuery);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Accept", "application/json");
 
-            return CallApi(client, request);
+            var getHistory = await _client.MarketData.GetHistoricRatesAsync(market, start, end, granularity);
+            //var results = getHistory;
+
+            return getHistory;
         }
 
-        public string CallApi(RestClient client, RestRequest request)
+        public async void History(string market, DateTime start, int granularity = 60)
         {
-            IRestResponse response = client.Execute(request);
-            return response.Content;
+            var end = DateTime.Now;
+
+            var results = await History_fetch(market, start, end, granularity);
+
+
+            List<string> myData = new List<string>();
+            foreach (Coinbase.Pro.Models.Candle candle in results)
+
+                {
+                    Console.WriteLine(candle.Time);
+                    Console.WriteLine(candle.Low);
+                    Console.WriteLine(candle.High);
+                    Console.WriteLine(candle.Open);
+                    Console.WriteLine(candle.Close);
+                    Console.WriteLine(candle.Volume);
+
+                }
+            
         }
+
+
+        public async void History(string market, DateTime start, DateTime end, int granularity = 60)
+        {
+
+            var results = await History_fetch(market, start, end, granularity);
+
+
+            List<string> myData = new List<string>();
+            foreach (Coinbase.Pro.Models.Candle candle in results)
+
+            {
+                Console.WriteLine(candle.Time);
+                Console.WriteLine(candle.Low);
+                Console.WriteLine(candle.High);
+                Console.WriteLine(candle.Open);
+                Console.WriteLine(candle.Close);
+                Console.WriteLine(candle.Volume);
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 
-//public enum TimeSpan : int
-//{
-//    One_Min = 60,
-//    Five_Min = 300,
-//    Fifteen_Min = 900,
-//    One_Hour = 3600,
-//    Six_Hour = 21600,
-//    One_Day = 86400,
-//};
+
+
+
+
+
+
+
+
+        //override for later
+        //public void history(string market, DateTime start, DateTime end, int granularity = 60)
+        //{
+
+
+        //    var getHistory = _client.MarketData.GetHistoricRatesAsync(market, start, end, granularity);
+
+        //    Console.WriteLine(getHistory);
+
+
+        //}
+
+
+
+
+

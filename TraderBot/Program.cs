@@ -28,9 +28,12 @@ namespace TraderBot //netflify.com
             //InitNetWork(mJsonString);
 
             //var testing = new Api.Fetch(1);
-            var testing = new Api();
-            string history = testing.History("BTC-USD");
-            Console.WriteLine(history);
+            var test = new Api();
+            var starttime = DateTime.Now.AddMinutes(-6);
+            test.History("BTC-USD", starttime);
+            
+
+                 
 
 
            Console.ReadKey();
