@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 namespace TraderBot
 {
     public class Api
-        // this willl be re written in future to not depend on Coinbase.pro lib
-        // all data exiting must be raw(ish)
+    // class might be reworked in future to not rely on Coinbase.pro lib
+    // so all data exiting must be raw(not using coinbase models)
     {
-        const string BaseUrl = "https://api-public.sandbox.exchange.coinbase.com"; //Sandbox URL
+        private const string BaseUrl = "https://api-public.sandbox.exchange.coinbase.com"; //Sandbox URL
         //const string BaseUrl = "https://api.exchange.coinbase.com"; //Live URL
 
-        readonly CoinbaseProClient _client;
+        private readonly CoinbaseProClient _client;
 
-        string _apikey = APIKeys.APIKey;
-        string _secret = APIKeys.APISecret;
-        string _passphrase = APIKeys.APISecret;
-
+        private string _apikey = APIKeys.APIKey;
+        private string _secret = APIKeys.APISecret;
+        private string _passphrase = APIKeys.APISecret;
 
         public Api()
         {
@@ -28,12 +27,10 @@ namespace TraderBot
                 Passphrase = _passphrase,
                 ApiUrl = "https://api-public.sandbox.pro.coinbase.com"
             });
-
         }
 
         private async Task<List<Coinbase.Pro.Models.Candle>> History_fetch(string market, DateTime start, DateTime end, int granularity)
         {
-
             var getHistory = await _client.MarketData.GetHistoricRatesAsync(market, start, end, granularity);
             //var results = getHistory;
 
@@ -46,28 +43,27 @@ namespace TraderBot
 
             var results = await History_fetch(market, start, end, granularity);
 
-
-            List<string> myData = new List<string>();
+            List<HistoricalData> myData = new List<HistoricalData>();
             foreach (Coinbase.Pro.Models.Candle candle in results)
 
+            {
+                HistoricalData _newdata = new HistoricalData
                 {
-                    Console.WriteLine(candle.Time);
-                    Console.WriteLine(candle.Low);
-                    Console.WriteLine(candle.High);
-                    Console.WriteLine(candle.Open);
-                    Console.WriteLine(candle.Close);
-                    Console.WriteLine(candle.Volume);
+                    Timestamp = candle.Time,
+                    PriceLow = (decimal)candle.Low,
+                    PriceHigh = (decimal)candle.High,
+                    PriceOpen = (decimal)candle.Open,
+                    PriceClose = (decimal)candle.Close
+                };
 
-                }
-            
+                myData.Insert(0, _newdata); //adds to start of list, could be wrong way round??
+                                            // does this matter with timestamps?
+            }
         }
-
 
         public async void History(string market, DateTime start, DateTime end, int granularity = 60)
         {
-
             var results = await History_fetch(market, start, end, granularity);
-
 
             List<string> myData = new List<string>();
             foreach (Coinbase.Pro.Models.Candle candle in results)
@@ -79,52 +75,16 @@ namespace TraderBot
                 Console.WriteLine(candle.Open);
                 Console.WriteLine(candle.Close);
                 Console.WriteLine(candle.Volume);
-
             }
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 
+//override for later
+//public void history(string market, DateTime start, DateTime end, int granularity = 60)
+//{
+//    var getHistory = _client.MarketData.GetHistoricRatesAsync(market, start, end, granularity);
 
+//    Console.WriteLine(getHistory);
 
-
-
-
-
-
-
-        //override for later
-        //public void history(string market, DateTime start, DateTime end, int granularity = 60)
-        //{
-
-
-        //    var getHistory = _client.MarketData.GetHistoricRatesAsync(market, start, end, granularity);
-
-        //    Console.WriteLine(getHistory);
-
-
-        //}
-
-
-
-
-
+//}

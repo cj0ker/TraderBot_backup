@@ -1,36 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace TraderBot
 {
-    class HistoricalData
+    internal class HistoricalData
     {
+        public DateTimeOffset Timestamp { get; set; } //need conversion?????
 
+        public decimal PriceLow { get; set; }
 
+        public decimal PriceHigh { get; set; }
 
-        [JsonProperty("timestamp")]
-        public string Timestamp;
+        public decimal PriceOpen { get; set; }
 
-        [JsonProperty("price_low")]
-        public int PriceLow;
-
-        [JsonProperty("price_high")]
-        public string PriceHigh;
-
-        [JsonProperty("price_open")]
-        public float PriceOpen;
-
-        [JsonProperty("price_close")]
-        public float PriceClose;
-
-
-
-
-
-
+        public decimal PriceClose { get; set; }
     }
 }
