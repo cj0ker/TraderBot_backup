@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -23,7 +22,6 @@ namespace TraderBot
             string tableName = DbTableNameConstructor(tradingPair, timeframe);
 
             string query = "Select * from " + tableName;
-
 
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
@@ -65,13 +63,9 @@ namespace TraderBot
             }
 
             string tableName = tradingPair + " " + stringtimefame;
-            
+
             return tableName;
         }
-
-
-
-
 
         //check when last updated and return time frame then fetch from api, fill in missing info and return
         ////
@@ -85,18 +79,8 @@ namespace TraderBot
 
         //        return output.ToList();
 
-
-
-
-
         //    }
 
-
-
         //}
-
-
-
-
     }
 }
