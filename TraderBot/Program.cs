@@ -34,8 +34,7 @@ namespace TraderBot //netflify.com
             //test.tradingpairs();
 
             var hello = new SqliteDataAccess();
-            hello.DbTableName("USD-BTC", 60);
-
+            hello.TableExists("testingstring");
 
 
 

@@ -47,7 +47,15 @@ namespace TraderBot
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
 
+        /// <summary>
+        /// takes the trading pair and the granularity and creats the table name
+        /// used for auto creating a new database
+        /// </summary>
+        /// <param name="tradingPair"></param>
+        /// <param name="timeframe"></param>
+        /// <returns></returns>
         private static string DbTableNameConstructor(string tradingPair, int timeframe)
+
         {
             string stringtimefame = "Hourly";
 
@@ -57,9 +65,38 @@ namespace TraderBot
             }
 
             string tableName = tradingPair + " " + stringtimefame;
-            Console.WriteLine(tableName);
-
-            return string.Empty;
+            
+            return tableName;
         }
+
+
+
+
+
+        //check when last updated and return time frame then fetch from api, fill in missing info and return
+        ////
+        //public string TableLastUpdate(string tableName)
+        //{
+        //    string query = "SELECT * FROM sqlite_master WHERE type = 'myTable' and name = '" + tableName + "'";
+
+        //    using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+        //    {
+        //        var output = cnn.Query(query);
+
+        //        return output.ToList();
+
+
+
+
+
+        //    }
+
+
+
+        //}
+
+
+
+
     }
 }
