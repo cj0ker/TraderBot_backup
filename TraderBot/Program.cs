@@ -31,8 +31,12 @@ namespace TraderBot //netflify.com
             var test = new Api();
             var starttime = DateTime.Now.AddMinutes(-6);
             //test.History("BTC-USD", starttime);
-            test.tradingpairs();
-            
+            //test.tradingpairs();
+
+            var hello = new SqliteDataAccess();
+            hello.DbTableName("USD-BTC", 60);
+
+
 
 
 
