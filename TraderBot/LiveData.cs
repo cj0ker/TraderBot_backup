@@ -3,7 +3,7 @@ using System;
 
 namespace TraderBot
 {
-    internal class LiveData
+    class LiveData
     {
         [JsonProperty("type")]
         public string Type;

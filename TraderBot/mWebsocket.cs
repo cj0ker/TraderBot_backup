@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Security.Authentication;
 using WebSocket4Net;
-
-//TODO: look into recieveing heartbeat messages (1 message persecond)
-//TODO: check for async
-//TODO: output data to main class
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TraderBot
 {
-    internal class mWebsocket
+    class mWebsocket
     {
         public string mPayload;
 
@@ -19,11 +19,19 @@ namespace TraderBot
             this.mPayload = mPayload;
         }
 
-        private WebSocket mSocketClient = null;
-        private int counter = 0;
+        WebSocket mSocketClient = null;
+        int counter = 0;
 
+        
+        
+
+
+        #region Methods
         public void InitNetWork()
         {
+            
+
+
             mSocketClient = new WebSocket("wss://ws-feed-public.sandbox.pro.coinbase.com", sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
             mSocketClient.Opened += new EventHandler(MSocketClient_Opened);
             mSocketClient.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(MSocketClient_Error);
@@ -33,11 +41,27 @@ namespace TraderBot
 
             mSocketClient.MessageReceived += MSocketClient_MessageReceived;
             mSocketClient.DataReceived += MSocketClient_DataReceived;
+            //ws.OnMessage += Ws_OnMessage;
             mSocketClient.Open();
         }
 
+        #endregion Methods
+
+
+        //private string InitPayload(mJson mPayload)
+        //{
+        //    string innerpayload = mPayload.ToString();
+        //    return innerpayload;
+            
+        //}
+
+        
+
+        
+
         private void MSocketClient_Opened(object sender, EventArgs e)
         {
+
             mSocketClient.Send(mPayload);
         }
 
@@ -69,11 +93,24 @@ namespace TraderBot
                     //    Console.WriteLine(aCandle);
                     //}
 
+
                     //Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.Message);
                     //Console.WriteLine(values.Count);
                     //dict works but needs adding to a list now?
                     //List<Product> products = JsonConvert.DeserializeObject<List<Product>>(json);
+
+
+
+
+
+
+
+
+
+
+
                 }
+
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
@@ -84,6 +121,18 @@ namespace TraderBot
         private void MSocketClient_DataReceived(object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine("DataRecieved" + e.Data);
+
         }
+
+
+
+
+
+
+
+
     }
 }
+
+
+
