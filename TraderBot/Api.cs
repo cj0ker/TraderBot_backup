@@ -1,6 +1,7 @@
 ﻿using Coinbase.Pro;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TraderBot
@@ -25,7 +26,7 @@ namespace TraderBot
                 ApiKey = _apikey,
                 Secret = _secret,
                 Passphrase = _passphrase,
-                ApiUrl = "https://api-public.sandbox.pro.coinbase.com"
+                //ApiUrl = "https://api-public.sandbox.pro.coinbase.com"
             });
         }
 
@@ -77,6 +78,27 @@ namespace TraderBot
                 Console.WriteLine(candle.Volume);
             }
         }
+
+        private async Task<List<Coinbase.Pro.Models.Product>> GetTradingPairs_fetch()
+        {
+            var getpairs = await _client.MarketData.GetProductsAsync();
+            var test = getpairs.Count();
+            // returned 329 trading pairs
+            Console.WriteLine(test);
+            Console.WriteLine(  );
+
+            return getpairs;
+        }
+
+        public async void tradingpairs()
+        {
+            var results = await GetTradingPairs_fetch();
+
+        }
+
+
+
+
     }
 }
 
